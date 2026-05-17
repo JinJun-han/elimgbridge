@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>다가치 연동 — 엘림G브릿지</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Malgun Gothic', sans-serif; background: #f0f4f8; color: #333; }
+
+    .topbar {
+      background: #0C2340; color: #fff;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar a { color: #fff; text-decoration: none; font-size: 0.9rem; opacity: 0.8; }
+    .topbar a:hover { opacity: 1; }
+    .topbar h1 { font-size: 1.05rem; }
+
+    .banner {
+      background: linear-gradient(135deg, #1a6b5a 0%, #006D77 60%, #0C2340 100%);
+      color: #fff; text-align: center; padding: 3rem 1rem 2.5rem;
+    }
+    .banner .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 20px; padding: 0.3rem 1rem;
+      font-size: 0.82rem; margin-bottom: 1rem;
+    }
+    .banner h2 { font-size: 2rem; margin-bottom: 0.6rem; }
+    .banner p { font-size: 0.95rem; opacity: 0.88; line-height: 1.7; }
+
+    /* 메인 이동 버튼 */
+    .main-btn-wrap {
+      text-align: center; margin: 2rem auto;
+    }
+    .main-btn {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      background: #006D77; color: #fff;
+      text-decoration: none; border-radius: 12px;
+      padding: 1rem 2.5rem; font-size: 1.15rem; font-weight: 700;
+      box-shadow: 0 4px 16px rgba(0,109,119,0.35);
+      transition: all 0.2s;
+    }
+    .main-btn:hover { background: #005560; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,109,119,0.4); }
+
+    /* 카테고리 카드 */
+    .section-title {
+      text-align: center; font-size: 1rem; color: #666;
+      margin: 0.5rem 0 1rem; font-weight: 600;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      max-width: 860px; margin: 0 auto 2rem;
+      padding: 0 1rem;
+    }
+    .card {
+      background: #fff; border: 2px solid #e8e8e8;
+      border-radius: 12px; padding: 1.2rem 0.5rem;
+      text-align: center; text-decoration: none; color: #333;
+      transition: all 0.2s; display: block;
+    }
+    .card:hover { border-color: #006D77; transform: translateY(-3px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .card .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .card .label { font-size: 0.85rem; font-weight: 600; color: #0C2340; }
+    .card .desc { font-size: 0.75rem; color: #888; margin-top: 0.2rem; }
+
+    /* 언어 섹션 */
+    .lang-wrap {
+      max-width: 860px; margin: 0 auto 2rem; padding: 0 1rem;
+      background: #fff; border-radius: 12px; padding: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .lang-wrap h3 { font-size: 1rem; color: #0C2340; margin-bottom: 1rem; }
+    .lang-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .lang-badge {
+      background: #e8f5f6; border: 1px solid #006D77;
+      color: #006D77; border-radius: 20px;
+      padding: 0.3rem 0.9rem; font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; text-decoration: none; display: inline-block;
+      transition: all 0.2s;
+    }
+    .lang-badge:hover { background: #006D77; color: #fff; }
+
+    /* 앱 다운로드 */
+    .app-wrap {
+      max-width: 860px; margin: 0 auto 2rem; padding: 0 1rem;
+      background: linear-gradient(135deg, #0C2340, #006D77);
+      border-radius: 14px; padding: 2rem;
+      display: flex; align-items: center; gap: 2rem;
+      flex-wrap: wrap; color: #fff;
+    }
+    .app-info { flex: 1; min-width: 200px; }
+    .app-info h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+    .app-info p { font-size: 0.88rem; opacity: 0.85; line-height: 1.5; }
+    .app-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .app-btn {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.4);
+      color: #fff; text-decoration: none; border-radius: 10px;
+      padding: 0.7rem 1.3rem; font-size: 0.9rem; font-weight: 600;
+      transition: all 0.2s;
+    }
+    .app-btn:hover { background: rgba(255,255,255,0.28); }
+
+    /* 협업 설명 */
+    .collab-wrap {
+      max-width: 860px; margin: 0 auto 2rem; padding: 0 1rem;
+    }
+    .collab-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 540px) { .collab-grid { grid-template-columns: 1fr; } }
+    .collab-card {
+      background: #fff; border-radius: 12px;
+      padding: 1.2rem; border-left: 4px solid #006D77;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .collab-card h4 { font-size: 0.95rem; color: #0C2340; margin-bottom: 0.4rem; }
+    .collab-card p { font-size: 0.82rem; color: #666; line-height: 1.6; }
+
+    footer { text-align: center; padding: 1.5rem; color: #999; font-size: 0.82rem; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">← 엘림G브릿지 홈</a>
+  <h1>🌐 다가치 × 엘림G브릿지</h1>
+  <a href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">다가치 열기 ↗</a>
+</div>
+
+<div class="banner">
+  <div class="badge">🤝 파트너십 연동</div>
+  <h2>다가치 × 엘림G브릿지</h2>
+  <p>16개 언어 AI 자동번역 · 10만 회원<br>이주민·유학생·청소년을 더 넓게 연결합니다</p>
+</div>
+
+<!-- 메인 이동 버튼 -->
+<div class="main-btn-wrap" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;padding:0 1rem;">
+  <a class="main-btn" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank" style="background:#1a6b5a;">
+    ▶ 다가치 앱 (Android)
+  </a>
+  <a class="main-btn" href="https://apps.apple.com/kh/app/dagachi/id6749035814" target="_blank" style="background:#0C2340;">
+    🍎 다가치 앱 (iPhone)
+  </a>
+</div>
+<p style="text-align:center;color:#e07;font-size:0.82rem;margin-top:0.75rem;">⚠️ 웹사이트(dagachi.or.kr)는 현재 도메인 설정 중 — 앱으로 이용하세요</p>
+
+<!-- 카테고리 -->
+<p class="section-title">원하는 서비스를 선택하세요</p>
+<div class="cards">
+  <a class="card" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">
+    <div class="icon">💼</div>
+    <div class="label">일자리 정보</div>
+    <div class="desc">채용공고 · 구직</div>
+  </a>
+  <a class="card" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">
+    <div class="icon">🏥</div>
+    <div class="label">병원 · 의료</div>
+    <div class="desc">가까운 병원 찾기</div>
+  </a>
+  <a class="card" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">
+    <div class="icon">📚</div>
+    <div class="label">교육 정보</div>
+    <div class="desc">한국어 · 학교</div>
+  </a>
+  <a class="card" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">
+    <div class="icon">🏠</div>
+    <div class="label">주거 · 임대</div>
+    <div class="desc">집 찾기 · 임대</div>
+  </a>
+  <a class="card" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">
+    <div class="icon">💰</div>
+    <div class="label">금융 · 재정</div>
+    <div class="desc">은행 · 송금</div>
+  </a>
+  <a class="card" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">
+    <div class="icon">⚖️</div>
+    <div class="label">법률 정보</div>
+    <div class="desc">비자 · 체류</div>
+  </a>
+  <a class="card" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">
+    <div class="icon">💬</div>
+    <div class="label">커뮤니티</div>
+    <div class="desc">언어별 모임</div>
+  </a>
+  <a class="card" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">
+    <div class="icon">🍽️</div>
+    <div class="label">음식점</div>
+    <div class="desc">고국 음식 찾기</div>
+  </a>
+</div>
+
+<!-- 협업 내용 -->
+<div class="collab-wrap">
+  <div class="collab-grid">
+    <div class="collab-card">
+      <h4>🤝 엘림G브릿지에서 제공</h4>
+      <p>기업매칭 · 정부 지원 프로그램 · 이주민 청소년 돌봄 · 유학생 상담 · 글로컬 선교 네트워크</p>
+    </div>
+    <div class="collab-card">
+      <h4>🌐 다가치에서 제공</h4>
+      <p>16개 언어 AI 자동번역 · 10만 회원 커뮤니티 · 생활 정보 · 5개국 해외 허브 센터</p>
+    </div>
+  </div>
+</div>
+
+<!-- 언어 선택 -->
+<div class="lang-wrap">
+  <h3>🌐 내 언어로 다가치 이용하기</h3>
+  <div class="lang-badges">
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇰🇷 한국어</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇺🇸 English</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇻🇳 Tiếng Việt</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇳🇵 नेपाली</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇵🇭 Filipino</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇮🇩 Bahasa</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇹🇭 ภาษาไทย</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇲🇳 Монгол</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇺🇿 O'zbek</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇷🇺 Русский</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇨🇳 中文</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇯🇵 日本語</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇰🇭 ខ្មែរ</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇪🇸 Español</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇫🇷 Français</a>
+    <a class="lang-badge" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">🇩🇪 Deutsch</a>
+  </div>
+</div>
+
+<!-- 앱 다운로드 -->
+<div class="app-wrap">
+  <div class="app-info">
+    <h3>📱 다가치 앱 다운로드</h3>
+    <p>스마트폰 앱으로 언제 어디서나<br>16개 언어 AI 자동번역 서비스 이용</p>
+  </div>
+  <div class="app-btns">
+    <a class="app-btn" href="https://play.google.com/store/apps/details?id=com.dagachi.dagachi" target="_blank">
+      ▶ Google Play
+    </a>
+    <a class="app-btn" href="https://apps.apple.com/kh/app/dagachi/id6749035814" target="_blank">
+      🍎 App Store
+    </a>
+  </div>
+</div>
+
+<footer>
+  © 2026 엘림G선교회 · 엘림G브릿지 · 다가치 파트너십
+</footer>
+
+</body>
+</html>

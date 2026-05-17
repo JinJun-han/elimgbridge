@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엘림G브릿지 통합 등록 폼</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Malgun Gothic', sans-serif; background: #f5f7fa; color: #333; }
+
+    .form-container {
+      max-width: 720px; margin: 2rem auto; padding: 2rem;
+      background: #fff; border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    .form-header { text-align: center; margin-bottom: 2rem; }
+    .form-header h2 { font-size: 1.6rem; color: #1A3A5C; margin-bottom: 0.4rem; }
+    .form-header p { color: #666; font-size: 0.95rem; }
+
+    /* Step indicator */
+    .steps { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 2rem; }
+    .step-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #ddd; transition: background 0.3s;
+    }
+    .step-dot.active { background: #1A3A5C; }
+    .step-dot.done { background: #1E8449; }
+
+    /* User type cards */
+    .type-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 520px) { .type-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .type-card {
+      border: 2px solid #e0e0e0; border-radius: 10px;
+      padding: 1rem 0.5rem; text-align: center; cursor: pointer;
+      transition: all 0.2s; background: #fafafa;
+    }
+    .type-card:hover { border-color: #1A3A5C; background: #f0f4f8; }
+    .type-card.selected { border-color: #1A3A5C; background: #e8f0f8; }
+    .type-card .icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
+    .type-card .label { font-size: 0.82rem; font-weight: 600; color: #333; line-height: 1.3; }
+    .type-card input[type="radio"] { display: none; }
+
+    /* Form sections */
+    .section { display: none; margin-bottom: 1.5rem; }
+    .section.visible { display: block; }
+    .section-title {
+      font-size: 1rem; font-weight: 700; color: #1A3A5C;
+      margin-bottom: 1rem; padding-bottom: 0.4rem;
+      border-bottom: 2px solid #e8f0f8;
+    }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    @media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
+    .field-row.full { grid-template-columns: 1fr; }
+
+    .field { display: flex; flex-direction: column; margin-bottom: 1rem; }
+    .field label { font-size: 0.85rem; color: #555; margin-bottom: 0.3rem; }
+    .field label .req { color: #c0392b; }
+    .field input, .field select, .field textarea {
+      border: 1.5px solid #ddd; border-radius: 6px;
+      padding: 0.55rem 0.75rem; font-size: 0.9rem; font-family: inherit;
+      transition: border-color 0.2s; outline: none;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: #1A3A5C;
+    }
+    .field textarea { resize: vertical; min-height: 80px; }
+
+    /* Checkboxes */
+    .check-group { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.3rem; }
+    .check-item {
+      display: flex; align-items: center; gap: 0.4rem;
+      background: #f5f7fa; border: 1.5px solid #ddd; border-radius: 6px;
+      padding: 0.4rem 0.75rem; cursor: pointer; font-size: 0.85rem;
+      transition: all 0.15s;
+    }
+    .check-item:hover { border-color: #1A3A5C; }
+    .check-item input { accent-color: #1A3A5C; }
+    .check-item.checked { border-color: #1E8449; background: #e8f5ee; }
+
+    /* Consent */
+    .consent-box {
+      background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px;
+      padding: 1rem; font-size: 0.82rem; color: #555; margin-bottom: 1rem;
+      max-height: 100px; overflow-y: auto; line-height: 1.6;
+    }
+    .consent-check { display: flex; align-items: center; gap: 0.6rem; font-size: 0.9rem; cursor: pointer; }
+    .consent-check input { accent-color: #1A3A5C; width: 16px; height: 16px; }
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 1rem; margin-top: 1.5rem; }
+    .btn {
+      flex: 1; padding: 0.85rem; border: none; border-radius: 8px;
+      font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-primary { background: #1A3A5C; color: #fff; }
+    .btn-primary:hover { background: #142e4a; }
+    .btn-secondary { background: #f0f0f0; color: #555; }
+    .btn-secondary:hover { background: #e0e0e0; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Success/Error */
+    .alert {
+      padding: 1rem; border-radius: 8px; margin-bottom: 1rem;
+      font-size: 0.9rem; display: none;
+    }
+    .alert.success { background: #e8f5ee; border: 1px solid #1E8449; color: #155724; }
+    .alert.error { background: #fdecea; border: 1px solid #c0392b; color: #721c24; }
+    .alert.visible { display: block; }
+
+    .spinner {
+      display: inline-block; width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff;
+      border-radius: 50%; animation: spin 0.6s linear infinite;
+      vertical-align: middle; margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <div class="form-header">
+    <h2>엘림G브릿지 등록</h2>
+    <p>해당하는 유형을 선택하시면 맞춤 서비스를 안내해 드립니다</p>
+  </div>
+
+  <!-- Step dots -->
+  <div class="steps">
+    <div class="step-dot active" id="dot1"></div>
+    <div class="step-dot" id="dot2"></div>
+    <div class="step-dot" id="dot3"></div>
+  </div>
+
+  <div id="alert-success" class="alert success">✅ 등록이 완료되었습니다! 곧 연락드리겠습니다.</div>
+  <div id="alert-error" class="alert error">⚠️ 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.</div>
+
+  <form id="regForm" novalidate>
+
+    <!-- STEP 1: User Type -->
+    <div id="step1">
+      <div class="section-title">어떤 분이신가요?</div>
+      <div class="type-grid">
+        <label class="type-card" onclick="selectType('immigrant_worker')">
+          <input type="radio" name="user_type" value="immigrant_worker">
+          <div class="icon">🏭</div>
+          <div class="label">이주민<br>근로자</div>
+        </label>
+        <label class="type-card" onclick="selectType('international_student')">
+          <input type="radio" name="user_type" value="international_student">
+          <div class="icon">🎓</div>
+          <div class="label">외국인<br>유학생</div>
+        </label>
+        <label class="type-card" onclick="selectType('overseas_student')">
+          <input type="radio" name="user_type" value="overseas_student">
+          <div class="icon">✈️</div>
+          <div class="label">해외 유학<br>준비생</div>
+        </label>
+        <label class="type-card" onclick="selectType('immigrant_youth')">
+          <input type="radio" name="user_type" value="immigrant_youth">
+          <div class="icon">🌱</div>
+          <div class="label">이주민<br>청소년</div>
+        </label>
+        <label class="type-card" onclick="selectType('multicultural_family')">
+          <input type="radio" name="user_type" value="multicultural_family">
+          <div class="icon">👨‍👩‍👧</div>
+          <div class="label">다문화<br>가정</div>
+        </label>
+        <label class="type-card" onclick="selectType('parent')">
+          <input type="radio" name="user_type" value="parent">
+          <div class="icon">👪</div>
+          <div class="label">이주민 자녀<br>부모님</div>
+        </label>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" id="btn-step1" disabled onclick="goStep(2)">다음 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Fields -->
+    <div id="step2" style="display:none;">
+
+      <!-- 공통 필드 -->
+      <div class="section visible" id="sec-common">
+        <div class="section-title">기본 정보</div>
+        <div class="field-row">
+          <div class="field">
+            <label>이름 <span class="req">*</span></label>
+            <input type="text" name="name" required placeholder="홍길동">
+          </div>
+          <div class="field">
+            <label>국적 <span class="req">*</span></label>
+            <input type="text" name="nationality" required placeholder="네팔, 베트남, 필리핀...">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>연령대</label>
+            <select name="age_group">
+              <option value="">선택</option>
+              <option>10대</option><option>20대</option>
+              <option>30대</option><option>40대이상</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>지역</label>
+            <select name="region">
+              <option value="">선택</option>
+              <option>거제</option><option>김해</option><option>울산</option>
+              <option>창원</option><option>부산</option><option>서울</option><option>기타</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>전화번호</label>
+            <input type="tel" name="phone" placeholder="010-0000-0000">
+          </div>
+          <div class="field">
+            <label>카카오 ID</label>
+            <input type="text" name="kakao_id" placeholder="카카오톡 아이디">
+          </div>
+        </div>
+        <div class="field">
+          <label>이메일</label>
+          <input type="email" name="email" placeholder="example@email.com">
+        </div>
+      </div>
+
+      <!-- 근로자 전용 -->
+      <div class="section" id="sec-worker">
+        <div class="section-title">🏭 근로자 정보</div>
+        <div class="field-row">
+          <div class="field">
+            <label>사업장명</label>
+            <input type="text" name="workplace" placeholder="회사명">
+          </div>
+          <div class="field">
+            <label>KIIP 사회통합프로그램 단계</label>
+            <select name="kiip_level">
+              <option value="">선택 (모르면 비워두세요)</option>
+              <option value="0">0단계 (기초)</option>
+              <option value="1">1단계</option><option value="2">2단계</option>
+              <option value="3">3단계</option><option value="4">4단계</option>
+              <option value="5">5단계 (완료)</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>관심 서비스</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" value="KIIP교육"> KIIP 교육</label>
+            <label class="check-item"><input type="checkbox" value="취업연계"> 취업 연계</label>
+            <label class="check-item"><input type="checkbox" value="법률상담"> 법률 상담</label>
+            <label class="check-item"><input type="checkbox" value="한국어교육"> 한국어 교육</label>
+            <label class="check-item"><input type="checkbox" value="커뮤니티"> 커뮤니티</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 외국인 유학생 전용 -->
+      <div class="section" id="sec-intl-student">
+        <div class="section-title">🎓 유학생 정보</div>
+        <div class="field-row">
+          <div class="field">
+            <label>재학 대학교</label>
+            <input type="text" name="university" placeholder="○○대학교">
+          </div>
+          <div class="field">
+            <label>전공</label>
+            <input type="text" name="major" placeholder="전공 입력">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>학년</label>
+            <select name="study_year">
+              <option value="">선택</option>
+              <option>1학년</option><option>2학년</option>
+              <option>3학년</option><option>4학년</option>
+              <option>대학원</option><option>어학연수</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>비자 유형</label>
+            <select name="visa_type">
+              <option value="">선택</option>
+              <option>D-2</option><option>D-4</option><option>기타</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>관심 서비스</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" value="장학금안내"> 장학금 안내</label>
+            <label class="check-item"><input type="checkbox" value="아르바이트"> 아르바이트</label>
+            <label class="check-item"><input type="checkbox" value="커뮤니티"> 커뮤니티</label>
+            <label class="check-item"><input type="checkbox" value="진로상담"> 진로 상담</label>
+            <label class="check-item"><input type="checkbox" value="선교훈련"> 선교 훈련</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 해외 유학 준비생 전용 -->
+      <div class="section" id="sec-overseas-student">
+        <div class="section-title">✈️ 해외 유학 정보</div>
+        <div class="field-row">
+          <div class="field">
+            <label>목표 국가</label>
+            <input type="text" name="target_country" placeholder="미국, 캐나다, 호주...">
+          </div>
+          <div class="field">
+            <label>목표 학교</label>
+            <input type="text" name="target_university" placeholder="희망 학교명 (미정도 가능)">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>출발 예정 연도</label>
+            <select name="departure_year">
+              <option value="">선택</option>
+              <option>2025</option><option>2026</option>
+              <option>2027</option><option>미정</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>관심 서비스</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" value="유학준비"> 유학 준비</label>
+            <label class="check-item"><input type="checkbox" value="장학금"> 장학금</label>
+            <label class="check-item"><input type="checkbox" value="선교훈련"> 선교 훈련</label>
+            <label class="check-item"><input type="checkbox" value="현지연계"> 현지 교회 연계</label>
+            <label class="check-item"><input type="checkbox" value="멘토링"> 멘토링</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 이주민 청소년 전용 -->
+      <div class="section" id="sec-youth">
+        <div class="section-title">🌱 청소년 정보</div>
+        <div class="field-row">
+          <div class="field">
+            <label>학교 구분</label>
+            <select name="school_level">
+              <option value="">선택</option>
+              <option>초등학교</option><option>중학교</option><option>고등학교</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>학교명</label>
+            <input type="text" name="school_name" placeholder="○○초등학교">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>한국어 능력</label>
+            <select name="korean_proficiency">
+              <option value="">선택</option>
+              <option value="상">상 (유창)</option>
+              <option value="중">중 (일상 소통 가능)</option>
+              <option value="하">하 (도움 필요)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>부모님 국적</label>
+            <input type="text" name="parent_nationality" placeholder="네팔, 베트남...">
+          </div>
+        </div>
+        <div class="field">
+          <label>관심 서비스</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" value="학습지원"> 학습 지원</label>
+            <label class="check-item"><input type="checkbox" value="진로상담"> 진로 상담</label>
+            <label class="check-item"><input type="checkbox" value="한국어"> 한국어 교육</label>
+            <label class="check-item"><input type="checkbox" value="멘토링"> 멘토링</label>
+            <label class="check-item"><input type="checkbox" value="청소년커뮤니티"> 청소년 커뮤니티</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 다문화가정/부모 전용 -->
+      <div class="section" id="sec-family">
+        <div class="section-title">👨‍👩‍👧 가정 정보</div>
+        <div class="field">
+          <label>관심 서비스</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" value="자녀교육"> 자녀 교육 지원</label>
+            <label class="check-item"><input type="checkbox" value="한국어"> 한국어 교육</label>
+            <label class="check-item"><input type="checkbox" value="법률상담"> 법률 상담</label>
+            <label class="check-item"><input type="checkbox" value="의료지원"> 의료 지원</label>
+            <label class="check-item"><input type="checkbox" value="커뮤니티"> 커뮤니티</label>
+            <label class="check-item"><input type="checkbox" value="취업연계"> 취업 연계</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 기타 메모 -->
+      <div class="field">
+        <label>남기실 말씀</label>
+        <textarea name="notes" placeholder="궁금한 점이나 상담 받고 싶은 내용을 자유롭게 적어주세요"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn btn-secondary" onclick="goStep(1)">← 이전</button>
+        <button type="button" class="btn btn-primary" onclick="goStep(3)">다음 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Consent + Submit -->
+    <div id="step3" style="display:none;">
+      <div class="section-title">개인정보 동의 및 제출</div>
+      <div class="consent-box">
+        엘림G브릿지(엘림G선교회)는 서비스 제공을 위해 아래와 같이 개인정보를 수집·이용합니다.
+        <br><br>
+        <strong>수집 항목:</strong> 이름, 국적, 연락처, 지역, 서비스 관심 분야 등<br>
+        <strong>수집 목적:</strong> 맞춤 서비스 안내, 상담 연결, 프로그램 참여 안내<br>
+        <strong>보유 기간:</strong> 동의 철회 시 또는 서비스 종료 시까지<br>
+        <strong>제3자 제공:</strong> 협력 기업·기관에 취업/교육 연계 목적으로 최소 정보 제공 (별도 동의 후)<br><br>
+        개인정보 처리에 관한 사항은 담당자(kakao: elimg_bridge)를 통해 문의하실 수 있습니다.
+      </div>
+      <label class="consent-check">
+        <input type="checkbox" id="consent" name="consent_personal_info">
+        개인정보 수집·이용에 동의합니다 <span style="color:#c0392b"> *</span>
+      </label>
+
+      <div class="btn-row" style="margin-top: 1.5rem;">
+        <button type="button" class="btn btn-secondary" onclick="goStep(2)">← 이전</button>
+        <button type="submit" class="btn btn-primary" id="btn-submit">
+          등록 완료
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script>
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ⚙️  Supabase 설정 — 본인 프로젝트 값으로 교체
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const SUPABASE_URL  = 'https://zaygzrbfuwulbceppamx.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpheWd6cmJmdXd1bGJjZXBwYW14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NjQxNTksImV4cCI6MjA5MTU0MDE1OX0.8RoTfAdtobsZwbFadK8FD_B3dt2ttm4l1ZuX0Piir5M';
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+let currentType = null;
+let currentStep = 1;
+
+const typeToSection = {
+  'immigrant_worker':     ['sec-worker'],
+  'international_student':['sec-intl-student'],
+  'overseas_student':     ['sec-overseas-student'],
+  'immigrant_youth':      ['sec-youth'],
+  'multicultural_family': ['sec-family'],
+  'parent':               ['sec-family']
+};
+
+function selectType(type) {
+  currentType = type;
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  document.getElementById('btn-step1').disabled = false;
+}
+
+function goStep(n) {
+  if (n === 2 && !currentType) { alert('유형을 선택해 주세요.'); return; }
+  if (n === 3) {
+    const name = document.querySelector('[name="name"]').value.trim();
+    const nat  = document.querySelector('[name="nationality"]').value.trim();
+    if (!name || !nat) { alert('이름과 국적은 필수 입력입니다.'); return; }
+  }
+
+  document.getElementById('step' + currentStep).style.display = 'none';
+  currentStep = n;
+  document.getElementById('step' + n).style.display = 'block';
+  updateDots();
+
+  if (n === 2) updateSections();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateSections() {
+  document.querySelectorAll('.section[id^="sec-"]').forEach(s => s.classList.remove('visible'));
+  document.getElementById('sec-common').classList.add('visible');
+  (typeToSection[currentType] || []).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('visible');
+  });
+}
+
+function updateDots() {
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('dot' + i);
+    dot.className = 'step-dot';
+    if (i < currentStep) dot.classList.add('done');
+    else if (i === currentStep) dot.classList.add('active');
+  }
+}
+
+// Check-item visual state
+document.addEventListener('change', function(e) {
+  if (e.target.type === 'checkbox' && e.target.closest('.check-item')) {
+    e.target.closest('.check-item').classList.toggle('checked', e.target.checked);
+  }
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Form submit → Supabase REST API
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+document.getElementById('regForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  if (!document.getElementById('consent').checked) {
+    alert('개인정보 동의가 필요합니다.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>등록 중...';
+
+  // Collect service_interest checkboxes
+  const serviceInterest = Array.from(
+    document.querySelectorAll('.check-group input[type="checkbox"]:checked')
+  ).map(cb => cb.value);
+
+  // Build payload — only include non-empty fields
+  const fd = new FormData(this);
+  const payload = { user_type: currentType };
+
+  const textFields = [
+    'name','nationality','age_group','phone','kakao_id','email','region','notes',
+    'workplace','university','major','study_year','visa_type',
+    'target_country','target_university','departure_year',
+    'school_level','school_name','parent_nationality','korean_proficiency',
+    'career_interest'
+  ];
+
+  textFields.forEach(f => {
+    const v = fd.get(f);
+    if (v && v.trim()) payload[f] = v.trim();
+  });
+
+  const intFields = ['kiip_level'];
+  intFields.forEach(f => {
+    const v = fd.get(f);
+    if (v !== null && v !== '') payload[f] = parseInt(v);
+  });
+
+  payload.consent_personal_info = true;
+  payload.service_interest = serviceInterest.length ? serviceInterest : null;
+  payload.site_source = window.location.hostname || 'local';
+  payload.language = navigator.language?.startsWith('ko') ? 'ko' : 'en';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON,
+        'Authorization': `Bearer ${SUPABASE_ANON}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok || res.status === 201) {
+      document.getElementById('alert-success').classList.add('visible');
+      document.getElementById('regForm').style.display = 'none';
+    } else {
+      const err = await res.json().catch(() => ({}));
+      console.error('Supabase error:', err);
+      document.getElementById('alert-error').classList.add('visible');
+      btn.disabled = false;
+      btn.textContent = '등록 완료';
+    }
+  } catch (err) {
+    console.error('Network error:', err);
+    document.getElementById('alert-error').classList.add('visible');
+    btn.disabled = false;
+    btn.textContent = '등록 완료';
+  }
+});
+</script>
+</body>
+</html>

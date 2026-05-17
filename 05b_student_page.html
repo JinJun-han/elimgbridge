@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엘림G브릿지 유학생 | ElimG Bridge Student Hub</title>
+  <meta name="description" content="한국 내 외국인 유학생 & 해외 유학 준비생을 위한 장학금, 취업, 선교훈련, 커뮤니티. 엘림G브릿지 유학생 허브.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0C2340;
+      --teal:    #006D77;
+      --accent:  #E29578;  /* coral */
+      --mint:    #83C5BE;
+      --light:   #EDF6F9;
+      --border:  #C8DDE4;
+      --text:    #1A2E3B;
+      --muted:   #607D8B;
+      --bg:      #F5FAFD;
+    }
+
+    body { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; background: var(--bg); color: var(--text); }
+
+    /* NAV */
+    nav {
+      background: var(--navy); color: #fff;
+      padding: 0 2rem; display: flex; align-items: center;
+      justify-content: space-between; height: 58px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.25);
+    }
+    .nav-logo { font-size: 1.05rem; font-weight: 800; }
+    .nav-logo span { color: var(--mint); }
+    .nav-sub { font-size: 0.7rem; opacity: 0.6; margin-left: 0.4rem; }
+    .nav-links { display: flex; gap: 1.4rem; font-size: 0.86rem; }
+    .nav-links a { opacity: 0.8; transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 1; }
+    @media (max-width: 580px) { .nav-links { display: none; } }
+
+    /* TYPE SWITCH */
+    .type-switch {
+      background: var(--navy); padding: 0 2rem 1rem; display: flex; justify-content: center;
+    }
+    .switch-inner {
+      background: rgba(255,255,255,0.1); border-radius: 30px;
+      display: flex; padding: 4px;
+    }
+    .switch-btn {
+      padding: 0.5rem 1.6rem; border-radius: 26px; font-size: 0.88rem;
+      font-weight: 700; cursor: pointer; border: none; background: transparent;
+      color: rgba(255,255,255,0.65); transition: all 0.2s; font-family: inherit;
+    }
+    .switch-btn.active { background: #fff; color: var(--navy); }
+
+    /* HERO */
+    .hero-intl, .hero-overseas {
+      color: #fff; padding: 4.5rem 2rem 3.5rem; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero-intl { background: linear-gradient(135deg, var(--teal) 0%, #004A55 100%); }
+    .hero-overseas { background: linear-gradient(135deg, var(--navy) 0%, #1A3A5C 100%); display: none; }
+
+    .hero-badge {
+      display: inline-block; font-size: 0.73rem; font-weight: 700; letter-spacing: 1px;
+      padding: 0.28rem 1rem; border-radius: 20px; margin-bottom: 1rem;
+    }
+    .badge-teal  { background: rgba(131,197,190,0.2); border: 1px solid var(--mint); color: var(--mint); }
+    .badge-coral { background: rgba(226,149,120,0.2); border: 1px solid var(--accent); color: var(--accent); }
+
+    .hero h1 { font-size: clamp(1.8rem, 4.5vw, 2.8rem); font-weight: 900; line-height: 1.2; margin-bottom: 0.9rem; }
+    .hero h1 em { font-style: normal; }
+    .em-mint  { color: var(--mint); }
+    .em-coral { color: var(--accent); }
+    .hero p { font-size: 0.97rem; opacity: 0.82; max-width: 520px; margin: 0 auto 2.2rem; line-height: 1.75; }
+
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-teal {
+      background: var(--mint); color: var(--navy);
+      font-weight: 800; padding: 0.85rem 2rem; border-radius: 8px;
+      border: none; font-size: 0.95rem; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-teal:hover { background: #6ab5ae; transform: translateY(-2px); }
+    .btn-coral {
+      background: var(--accent); color: #fff;
+      font-weight: 800; padding: 0.85rem 2rem; border-radius: 8px;
+      border: none; font-size: 0.95rem; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-coral:hover { background: #d4855f; transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent; color: #fff;
+      border: 2px solid rgba(255,255,255,0.4);
+      font-weight: 600; padding: 0.85rem 2rem; border-radius: 8px;
+      font-size: 0.95rem; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-ghost:hover { border-color: #fff; }
+
+    /* TAB CONTENT */
+    .page-content { display: none; }
+    .page-content.active { display: block; }
+
+    /* SECTION */
+    .section { padding: 3.5rem 1.5rem; max-width: 960px; margin: 0 auto; }
+    .section-label {
+      display: inline-block; font-size: 0.73rem; font-weight: 700; letter-spacing: 1px;
+      padding: 0.25rem 0.9rem; border-radius: 20px; border: 1px solid var(--border);
+      margin-bottom: 0.75rem; background: var(--light); color: var(--teal);
+    }
+    .section-title { font-size: clamp(1.3rem, 3vw, 1.9rem); font-weight: 800; color: var(--navy); margin-bottom: 0.5rem; }
+    .section-sub { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 2.2rem; }
+
+    /* SERVICE CARDS */
+    .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
+    @media (max-width: 640px) { .service-grid { grid-template-columns: 1fr 1fr; } }
+
+    .svc-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 1.4rem 1.1rem; transition: all 0.22s;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+    }
+    .svc-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,109,119,0.12); border-color: var(--teal); }
+    .svc-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 0.75rem;
+    }
+    .ic-teal  { background: #D1ECF1; }
+    .ic-coral { background: #FDE8E2; }
+    .svc-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; }
+    .svc-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+    /* INFO GRID */
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
+    .info-block {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;
+    }
+    .info-block h4 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 1rem;
+      padding-bottom: 0.5rem; border-bottom: 2px solid var(--light); }
+    .info-list { list-style: none; }
+    .info-list li {
+      display: flex; gap: 0.6rem; align-items: flex-start;
+      padding: 0.5rem 0; border-bottom: 1px solid var(--light);
+      font-size: 0.83rem; line-height: 1.5;
+    }
+    .info-list li:last-child { border-bottom: none; }
+    .info-list .ico { flex-shrink: 0; font-size: 1rem; }
+
+    /* MISSION BOX */
+    .mission-box {
+      background: linear-gradient(135deg, var(--teal), #004A55);
+      color: #fff; border-radius: 16px; padding: 2.5rem 2rem; text-align: center;
+      margin: 3rem 0;
+    }
+    .mission-box h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .mission-box p { opacity: 0.85; font-size: 0.9rem; line-height: 1.7; max-width: 480px; margin: 0 auto 1.5rem; }
+
+    /* FORM */
+    .form-section { background: var(--navy); padding: 4rem 1.5rem; }
+    .form-inner { max-width: 720px; margin: 0 auto; }
+    .form-title { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.4rem; }
+    .form-sub { color: rgba(255,255,255,0.7); font-size: 0.88rem; margin-bottom: 2rem; line-height: 1.6; }
+
+    .form-tabs { display: flex; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 4px; margin-bottom: 1.5rem; }
+    .form-tab {
+      flex: 1; text-align: center; padding: 0.6rem; border-radius: 6px;
+      font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none;
+      background: transparent; color: rgba(255,255,255,0.6); transition: all 0.2s; font-family: inherit;
+    }
+    .form-tab.active { background: #fff; color: var(--navy); }
+
+    .form-card { background: #fff; border-radius: 14px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+    .form-row.full { grid-template-columns: 1fr; }
+
+    .field { display: flex; flex-direction: column; }
+    .field label { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.3rem; font-weight: 600; }
+    .field label .req { color: #c0392b; }
+    .field input, .field select, .field textarea {
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 0.6rem 0.85rem; font-size: 0.9rem; font-family: inherit;
+      outline: none; transition: border-color 0.2s; color: var(--text); background: #fff;
+    }
+    .field input:focus, .field select:focus { border-color: var(--teal); }
+    .field textarea { min-height: 80px; resize: vertical; }
+
+    .check-group { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.35rem; }
+    .check-item {
+      display: flex; align-items: center; gap: 0.35rem;
+      background: var(--light); border: 1.5px solid var(--border); border-radius: 6px;
+      padding: 0.35rem 0.75rem; cursor: pointer; font-size: 0.8rem; transition: all 0.15s; color: var(--text);
+    }
+    .check-item:hover { border-color: var(--teal); }
+    .check-item.checked { border-color: var(--teal); background: #D1ECF1; color: var(--teal); font-weight: 600; }
+    .check-item input { accent-color: var(--teal); }
+
+    .consent-row {
+      display: flex; align-items: flex-start; gap: 0.7rem;
+      background: #F9F9F9; border: 1px solid #E0E0E0; border-radius: 8px;
+      padding: 0.9rem; margin-bottom: 1.2rem; font-size: 0.81rem; color: #555; line-height: 1.5;
+    }
+    .consent-row input { accent-color: var(--teal); margin-top: 2px; flex-shrink: 0; }
+
+    .btn-submit {
+      width: 100%; padding: 1rem; background: var(--teal); color: #fff;
+      border: none; border-radius: 8px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-submit:hover { background: #005B63; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-submit.coral { background: var(--accent); }
+    .btn-submit.coral:hover { background: #C97A55; }
+
+    .spinner {
+      display: inline-block; width: 15px; height: 15px;
+      border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff;
+      border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 5px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alert { padding: 0.9rem 1.1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.88rem; display: none; }
+    .alert.visible { display: block; }
+    .alert.success { background: #E0F4F6; border: 1px solid var(--teal); color: #00434B; }
+    .alert.error   { background: #FFEBEE; border: 1px solid #C62828; color: #B71C1C; }
+
+    /* FIELD SECTION */
+    .field-section { display: none; }
+    .field-section.visible { display: block; }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy); color: rgba(255,255,255,0.6);
+      text-align: center; padding: 2rem; font-size: 0.8rem;
+    }
+    footer strong { color: #fff; }
+    footer a { color: var(--mint); }
+
+    /* BG ALT */
+    .bg-alt { background: var(--light); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="display:flex; align-items:center;">
+    <div class="nav-logo">엘림G<span>브릿지</span></div>
+    <span class="nav-sub">· 유학생 허브</span>
+  </div>
+  <div class="nav-links">
+    <a href="#services">서비스</a>
+    <a href="#register">등록하기</a>
+    <a href="https://elimg.kr">선교 허브</a>
+    <a href="https://elimg.com">KIIP</a>
+  </div>
+</nav>
+
+<!-- TYPE SWITCH -->
+<div class="type-switch">
+  <div class="switch-inner">
+    <button class="switch-btn active" id="sw-intl" onclick="switchType('intl')">🎓 한국 유학생</button>
+    <button class="switch-btn" id="sw-overseas" onclick="switchType('overseas')">✈️ 해외 유학 준비</button>
+  </div>
+</div>
+
+<!-- ═══ 한국 유학생 ═══ -->
+<div class="page-content active" id="page-intl">
+  <div class="hero-intl hero">
+    <div class="hero-badge badge-teal">INTERNATIONAL STUDENT HUB</div>
+    <h1>한국에서 공부하는<br>당신을 위한 <em class="em-mint">브릿지</em></h1>
+    <p>장학금 · 아르바이트 · 진로상담 · 커뮤니티<br>한국 대학의 외국인 유학생을 위한 통합 지원 플랫폼</p>
+    <div class="hero-btns">
+      <button class="btn-teal" onclick="showForm('intl')">유학생 등록하기</button>
+      <button class="btn-ghost" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">서비스 보기</button>
+    </div>
+  </div>
+
+  <section class="section" id="services">
+    <div class="section-label">SERVICES FOR STUDENTS</div>
+    <div class="section-title">유학생을 위한 6가지 지원</div>
+    <div class="section-sub">한국 대학에서 공부하는 외국인 유학생이 겪는 현실적인 어려움을 함께 해결합니다.</div>
+    <div class="service-grid">
+      <div class="svc-card">
+        <div class="svc-icon ic-teal">🎓</div>
+        <h3>장학금 안내</h3>
+        <p>정부초청 · 대학 자체 · 민간 장학금 정보 수집 및 신청 지원.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon ic-teal">💼</div>
+        <h3>아르바이트 연결</h3>
+        <p>비자 조건에 맞는 합법 아르바이트. 협력 기업 우선 연결.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon ic-teal">🗺️</div>
+        <h3>진로 상담</h3>
+        <p>한국 취업 vs 귀국 vs 제3국 진출. 비전별 맞춤 로드맵 제공.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon ic-coral">🕊️</div>
+        <h3>선교 훈련</h3>
+        <p>글로컬 선교사 훈련 과정. 공부하며 사명을 발견합니다.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon ic-teal">👥</div>
+        <h3>유학생 커뮤니티</h3>
+        <p>국적 불문 유학생 네트워크. 정보 공유 · 스터디 · 친목 모임.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon ic-teal">📜</div>
+        <h3>비자·행정 지원</h3>
+        <p>D-2·D-4 연장, 체류자격 변경, KIIP 등록 등 행정 서류 안내.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="bg-alt">
+    <section class="section">
+      <div class="section-label">SCHOLARSHIP & JOBS</div>
+      <div class="section-title">실질적인 정보를 드립니다</div>
+      <div class="section-sub">등록하시면 아래 정보를 정기적으로 안내해 드립니다.</div>
+      <div class="info-grid">
+        <div class="info-block">
+          <h4>🎓 연결되는 장학금</h4>
+          <ul class="info-list">
+            <li><span class="ico">🇰🇷</span><span>한국정부초청 GKS 장학금 (교육부)</span></li>
+            <li><span class="ico">🏛️</span><span>NIIED 이공계 장학 프로그램</span></li>
+            <li><span class="ico">🏢</span><span>협력 대학별 유학생 장학금</span></li>
+            <li><span class="ico">⛪</span><span>엘림G브릿지 선교장학금</span></li>
+            <li><span class="ico">🤝</span><span>지자체·기업 후원 장학 (경남·부산)</span></li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <h4>💼 연결되는 일자리</h4>
+          <ul class="info-list">
+            <li><span class="ico">🏭</span><span>협력 기업 파트타임 (비자 적법 범위)</span></li>
+            <li><span class="ico">🌐</span><span>다국어 통역·번역 프리랜서</span></li>
+            <li><span class="ico">👨‍🏫</span><span>외국어 과외·교육 보조</span></li>
+            <li><span class="ico">💻</span><span>IT·글로컬 스타트업 인턴십</span></li>
+            <li><span class="ico">🤲</span><span>복지관·NGO 다문화 보조</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="section">
+    <div class="mission-box">
+      <h3>🌍 공부가 사명이 될 때</h3>
+      <p>한국에서의 유학은 끝이 아닙니다. 글로컬 선교사로 훈련받고, 졸업 후 고국과 세계를 잇는 브릿지가 되어보세요. 엘림G브릿지는 함께 갑니다.</p>
+      <button class="btn-teal" onclick="showForm('intl')">선교훈련 포함 등록하기</button>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ 해외 유학 준비 ═══ -->
+<div class="page-content" id="page-overseas">
+  <div class="hero-overseas hero">
+    <div class="hero-badge badge-coral">OVERSEAS STUDY PREP</div>
+    <h1>세계로 나가는<br>당신의 <em class="em-coral">브릿지</em>가 되겠습니다</h1>
+    <p>미국 · 캐나다 · 호주 · 영국 · 선교지 유학<br>준비부터 현지 정착까지 글로컬 네트워크로 함께합니다</p>
+    <div class="hero-btns">
+      <button class="btn-coral" onclick="showForm('overseas')">유학 준비 등록하기</button>
+      <button class="btn-ghost" onclick="document.getElementById('overseas-services').scrollIntoView({behavior:'smooth'})">서비스 보기</button>
+    </div>
+  </div>
+
+  <section class="section" id="overseas-services">
+    <div class="section-label">OVERSEAS STUDY SUPPORT</div>
+    <div class="section-title">해외 유학, 혼자 준비하지 마세요</div>
+    <div class="section-sub">30년 글로컬 네트워크가 유학 준비부터 현지 교회 연결까지 지원합니다.</div>
+    <div class="service-grid">
+      <div class="svc-card">
+        <div class="svc-icon ic-coral">✈️</div>
+        <h3>유학 준비 컨설팅</h3>
+        <p>학교 선택 · 지원서 · 어학시험 · 비자 서류. 단계별 체크리스트 제공.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon ic-coral">💰</div>
+        <h3>장학금 연결</h3>
+        <p>해외 대학 장학금 · 선교 장학금 · 기업 후원 장학. 맞춤 정보 제공.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon ic-coral">🕊️</div>
+        <h3>선교 훈련</h3>
+        <p>유학지에서 선교사로 사는 법. 현지 교회 연결 · 팀 파송 준비.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon ic-teal">🤝</div>
+        <h3>현지 네트워크</h3>
+        <p>엘림G브릿지 글로컬 파트너 교회와 연결. 현지 정착 멘토링.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon ic-teal">💬</div>
+        <h3>선배 멘토링</h3>
+        <p>같은 나라 유학 경험자와 1:1 매칭. 현실적인 준비 조언.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon ic-coral">🌐</div>
+        <h3>글로컬 리더십</h3>
+        <p>한국에서 세계로, 세계에서 한국으로. 쌍방향 선교 비전 훈련.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="bg-alt">
+    <section class="section">
+      <div class="section-label">POPULAR DESTINATIONS</div>
+      <div class="section-title">파트너 네트워크 지역</div>
+      <div class="section-sub">아래 지역에 엘림G브릿지 파트너 교회 또는 동문이 있어 현지 연결이 가능합니다.</div>
+      <div class="info-grid">
+        <div class="info-block">
+          <h4>🌏 아시아·오세아니아</h4>
+          <ul class="info-list">
+            <li><span class="ico">🇳🇵</span><span>네팔 — 카트만두 선교 파트너</span></li>
+            <li><span class="ico">🇻🇳</span><span>베트남 — 하노이·호치민 연결</span></li>
+            <li><span class="ico">🇵🇭</span><span>필리핀 — 세부·마닐라 교회 네트워크</span></li>
+            <li><span class="ico">🇦🇺</span><span>호주 — 시드니·멜버른 파트너 교회</span></li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <h4>🌎 북미·유럽</h4>
+          <ul class="info-list">
+            <li><span class="ico">🇺🇸</span><span>미국 — 동부·서부 코리안 디아스포라 연결</span></li>
+            <li><span class="ico">🇨🇦</span><span>캐나다 — 밴쿠버·토론토 파트너</span></li>
+            <li><span class="ico">🇬🇧</span><span>영국 — 런던 한인 커뮤니티 연결</span></li>
+            <li><span class="ico">🇩🇪</span><span>독일 — 프랑크푸르트 선교 네트워크</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- REGISTRATION FORM (공유) -->
+<div class="form-section" id="register">
+  <div class="form-inner">
+    <div class="form-title">등록하기</div>
+    <div class="form-sub">등록하시면 맞춤 정보와 멘토를 연결해 드립니다. 24시간 내 답변.</div>
+
+    <div class="form-tabs">
+      <button class="form-tab active" id="ftab-intl" onclick="switchFormTab('intl')">🎓 한국 유학생</button>
+      <button class="form-tab" id="ftab-overseas" onclick="switchFormTab('overseas')">✈️ 해외 유학 준비</button>
+    </div>
+
+    <div class="form-card">
+      <div id="falert-success" class="alert success">✅ 등록 완료! 담당자가 24시간 내 연락드리겠습니다.</div>
+      <div id="falert-error"   class="alert error">⚠️ 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.</div>
+
+      <form id="studentForm" novalidate>
+        <!-- 공통 -->
+        <div class="form-row">
+          <div class="field">
+            <label>이름 <span class="req">*</span></label>
+            <input type="text" name="name" required placeholder="이름 (Name)">
+          </div>
+          <div class="field">
+            <label>국적 <span class="req">*</span></label>
+            <input type="text" name="nationality" required placeholder="네팔, 베트남, 중국...">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>연락처 또는 카카오 ID</label>
+            <input type="text" name="contact" placeholder="010-0000-0000 / 카카오ID">
+          </div>
+          <div class="field">
+            <label>이메일</label>
+            <input type="email" name="email" placeholder="example@email.com">
+          </div>
+        </div>
+
+        <!-- 한국 유학생 전용 -->
+        <div class="field-section visible" id="fs-intl">
+          <div style="height:1px; background:var(--border); margin:1rem 0;"></div>
+          <div class="form-row">
+            <div class="field">
+              <label>재학 대학교</label>
+              <input type="text" name="university" placeholder="○○대학교">
+            </div>
+            <div class="field">
+              <label>전공</label>
+              <input type="text" name="major" placeholder="전공 입력">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>학년</label>
+              <select name="study_year">
+                <option value="">선택</option>
+                <option>1학년</option><option>2학년</option>
+                <option>3학년</option><option>4학년</option>
+                <option>대학원</option><option>어학연수</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>비자 유형</label>
+              <select name="visa_type">
+                <option value="">선택</option>
+                <option>D-2</option><option>D-4</option><option>기타</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:1rem;">
+            <label>관심 서비스</label>
+            <div class="check-group" id="intl-interests">
+              <label class="check-item"><input type="checkbox" value="장학금"> 🎓 장학금</label>
+              <label class="check-item"><input type="checkbox" value="아르바이트"> 💼 아르바이트</label>
+              <label class="check-item"><input type="checkbox" value="진로상담"> 🗺️ 진로상담</label>
+              <label class="check-item"><input type="checkbox" value="선교훈련"> 🕊️ 선교훈련</label>
+              <label class="check-item"><input type="checkbox" value="커뮤니티"> 👥 커뮤니티</label>
+              <label class="check-item"><input type="checkbox" value="비자행정"> 📜 비자·행정</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 해외 유학 전용 -->
+        <div class="field-section" id="fs-overseas">
+          <div style="height:1px; background:var(--border); margin:1rem 0;"></div>
+          <div class="form-row">
+            <div class="field">
+              <label>목표 국가</label>
+              <input type="text" name="target_country" placeholder="미국, 캐나다, 호주...">
+            </div>
+            <div class="field">
+              <label>목표 학교 (미정도 OK)</label>
+              <input type="text" name="target_university" placeholder="희망 학교명">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>출발 예정 연도</label>
+              <select name="departure_year">
+                <option value="">선택</option>
+                <option>2025</option><option>2026</option>
+                <option>2027</option><option>미정</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:1rem;">
+            <label>관심 서비스</label>
+            <div class="check-group" id="overseas-interests">
+              <label class="check-item"><input type="checkbox" value="유학준비"> ✈️ 유학준비</label>
+              <label class="check-item"><input type="checkbox" value="장학금"> 💰 장학금</label>
+              <label class="check-item"><input type="checkbox" value="선교훈련"> 🕊️ 선교훈련</label>
+              <label class="check-item"><input type="checkbox" value="현지연계"> 🌐 현지 교회 연계</label>
+              <label class="check-item"><input type="checkbox" value="멘토링"> 🤝 선배 멘토링</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field form-row full" style="margin-bottom:1.2rem;">
+          <label>남기실 말씀</label>
+          <textarea name="notes" placeholder="궁금한 점, 상담 내용을 자유롭게 적어주세요"></textarea>
+        </div>
+
+        <div class="consent-row">
+          <input type="checkbox" id="fconsent" required>
+          <label for="fconsent">
+            개인정보 수집·이용에 동의합니다. (수집 항목: 이름, 국적, 연락처, 학교 정보 / 목적: 맞춤 서비스 제공 / 보유: 철회 시까지)
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit" id="fbtn-submit">등록 완료</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>엘림G브릿지 유학생 허브</strong> | 엘림G선교회<br>
+  <a href="https://elimg.kr">elimg.kr</a> ·
+  <a href="https://elimg.com">elimg.com</a> · 경남 거제·김해·창원·부산
+</footer>
+
+<script>
+const SUPABASE_URL  = 'https://zaygzrbfuwulbceppamx.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpheWd6cmJmdXd1bGJjZXBwYW14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NjQxNTksImV4cCI6MjA5MTU0MDE1OX0.8RoTfAdtobsZwbFadK8FD_B3dt2ttm4l1ZuX0Piir5M';
+
+let currentType = 'intl'; // 'intl' | 'overseas'
+
+/* ── Page type switch ── */
+function switchType(type) {
+  currentType = type;
+  document.getElementById('sw-intl').classList.toggle('active', type === 'intl');
+  document.getElementById('sw-overseas').classList.toggle('active', type === 'overseas');
+  document.getElementById('page-intl').classList.toggle('active', type === 'intl');
+  document.getElementById('page-overseas').classList.toggle('active', type === 'overseas');
+}
+
+/* ── Form tab switch ── */
+function switchFormTab(type) {
+  currentType = type;
+  document.getElementById('ftab-intl').classList.toggle('active', type === 'intl');
+  document.getElementById('ftab-overseas').classList.toggle('active', type === 'overseas');
+  document.getElementById('fs-intl').classList.toggle('visible', type === 'intl');
+  document.getElementById('fs-overseas').classList.toggle('visible', type === 'overseas');
+
+  const btn = document.getElementById('fbtn-submit');
+  btn.className = 'btn-submit' + (type === 'overseas' ? ' coral' : '');
+}
+
+function showForm(type) {
+  currentType = type;
+  switchFormTab(type);
+  document.getElementById('register').scrollIntoView({ behavior: 'smooth' });
+}
+
+/* ── Check-item visuals ── */
+document.addEventListener('change', function(e) {
+  if (e.target.type === 'checkbox' && e.target.closest('.check-item')) {
+    e.target.closest('.check-item').classList.toggle('checked', e.target.checked);
+  }
+});
+
+/* ── Submit ── */
+document.getElementById('studentForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  if (!document.getElementById('fconsent').checked) { alert('개인정보 동의가 필요합니다.'); return; }
+
+  const btn = document.getElementById('fbtn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>등록 중...';
+
+  const fd = new FormData(this);
+  const checkboxes = currentType === 'intl'
+    ? document.querySelectorAll('#intl-interests input:checked')
+    : document.querySelectorAll('#overseas-interests input:checked');
+  const serviceInterest = Array.from(checkboxes).map(c => c.value);
+
+  const payload = {
+    user_type: currentType === 'intl' ? 'international_student' : 'overseas_student',
+    name:        fd.get('name')?.trim(),
+    nationality: fd.get('nationality')?.trim(),
+    email:       fd.get('email')?.trim()   || null,
+    notes:       fd.get('notes')?.trim()   || null,
+    service_interest: serviceInterest.length ? serviceInterest : null,
+    consent_personal_info: true,
+    site_source: 'glocal-student',
+  };
+
+  const contact = fd.get('contact')?.trim();
+  if (contact) {
+    if (/^\d/.test(contact)) payload.phone = contact;
+    else payload.kakao_id = contact;
+  }
+
+  if (currentType === 'intl') {
+    payload.university  = fd.get('university')?.trim()  || null;
+    payload.major       = fd.get('major')?.trim()       || null;
+    payload.study_year  = fd.get('study_year')          || null;
+    payload.visa_type   = fd.get('visa_type')           || null;
+  } else {
+    payload.target_country     = fd.get('target_country')?.trim()     || null;
+    payload.target_university  = fd.get('target_university')?.trim()  || null;
+    payload.departure_year     = fd.get('departure_year')             || null;
+    payload.mission_interest   = serviceInterest.includes('선교훈련');
+  }
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON,
+        'Authorization': `Bearer ${SUPABASE_ANON}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok || res.status === 201) {
+      document.getElementById('falert-success').classList.add('visible');
+      this.reset();
+      document.querySelectorAll('.check-item').forEach(c => c.classList.remove('checked'));
+      document.getElementById('register').scrollIntoView({ behavior: 'smooth' });
+    } else { throw new Error(); }
+  } catch {
+    document.getElementById('falert-error').classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '등록 완료';
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엘림G브릿지 청소년 | 이주민 청소년을 위한 꿈의 브릿지</title>
+  <meta name="description" content="이주민 청소년을 위한 학습지원, 진로상담, 멘토링, 한국어 교육. 엘림G브릿지 청소년 센터.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:  #1B5E20;   /* deep green */
+      --accent:   #FF8F00;   /* amber */
+      --sky:      #0277BD;
+      --light:    #F1F8E9;
+      --border:   #DCE8D0;
+      --text:     #2E3B2E;
+      --muted:    #6B7C6B;
+      --bg:       #F9FCF7;
+    }
+
+    body { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; background: var(--bg); color: var(--text); }
+
+    /* NAV */
+    nav {
+      background: var(--primary); color: #fff;
+      padding: 0 2rem; display: flex; align-items: center;
+      justify-content: space-between; height: 58px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .nav-logo { font-size: 1.05rem; font-weight: 800; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 1.4rem; font-size: 0.86rem; }
+    .nav-links a { opacity: 0.85; transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 1; }
+    @media (max-width: 580px) { .nav-links { display: none; } }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(160deg, var(--primary) 0%, #2E7D32 50%, #1B5E20 100%);
+      color: #fff; padding: 5rem 2rem 3.5rem; text-align: center; overflow: hidden;
+      position: relative;
+    }
+    .hero-bg-circles {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+    }
+    .circle {
+      position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .c1 { width: 400px; height: 400px; top: -100px; right: -80px; }
+    .c2 { width: 250px; height: 250px; bottom: -60px; left: -40px; }
+    .c3 { width: 150px; height: 150px; top: 60px; left: 15%; }
+
+    .hero-badge {
+      display: inline-block; background: rgba(255,143,0,0.2);
+      border: 1px solid var(--accent); color: var(--accent);
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 1px;
+      padding: 0.28rem 1rem; border-radius: 20px; margin-bottom: 1.2rem;
+    }
+    .hero h1 { font-size: clamp(1.9rem, 4.5vw, 3rem); font-weight: 900; line-height: 1.2; margin-bottom: 1rem; }
+    .hero h1 .accent { color: var(--accent); }
+    .hero p { font-size: 1rem; opacity: 0.85; max-width: 500px; margin: 0 auto 2.5rem; line-height: 1.75; }
+    .hero-flags { font-size: 1.8rem; letter-spacing: 0.3rem; margin-bottom: 2rem; }
+
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent); color: #fff; font-weight: 800;
+      padding: 0.85rem 2rem; border-radius: 30px; border: none;
+      font-size: 0.95rem; cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(255,143,0,0.4);
+    }
+    .btn-primary:hover { background: #e65100; transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: #fff;
+      border: 2px solid rgba(255,255,255,0.5);
+      font-weight: 600; padding: 0.85rem 2rem; border-radius: 30px;
+      font-size: 0.95rem; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: #fff; }
+
+    /* SERVICES */
+    .section { padding: 3.5rem 1.5rem; max-width: 960px; margin: 0 auto; }
+    .section-label {
+      display: inline-block; background: var(--light); color: var(--primary);
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 1px;
+      padding: 0.25rem 0.9rem; border-radius: 20px; border: 1px solid var(--border);
+      margin-bottom: 0.75rem;
+    }
+    .section-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+    .section-sub { color: var(--muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 2.5rem; }
+
+    .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    @media (max-width: 640px) { .service-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 400px) { .service-grid { grid-template-columns: 1fr; } }
+
+    .service-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 14px;
+      padding: 1.5rem 1.2rem; text-align: center;
+      transition: all 0.2s; cursor: default;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(27,94,32,0.12); border-color: var(--primary); }
+    .service-card .s-icon { font-size: 2.2rem; margin-bottom: 0.75rem; }
+    .service-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
+    .service-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+    /* STORIES */
+    .stories-bg { background: var(--light); }
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
+    @media (max-width: 680px) { .story-grid { grid-template-columns: 1fr; } }
+
+    .story-card {
+      background: #fff; border-radius: 12px; padding: 1.5rem;
+      border-left: 4px solid var(--accent);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .story-quote { font-size: 2rem; color: var(--accent); line-height: 1; margin-bottom: 0.5rem; }
+    .story-text { font-size: 0.88rem; color: var(--text); line-height: 1.7; font-style: italic; margin-bottom: 1rem; }
+    .story-who { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+
+    /* PROGRAMS */
+    .program-list { display: flex; flex-direction: column; gap: 1rem; }
+    .program-item {
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      padding: 1.2rem 1.5rem; display: flex; align-items: center; gap: 1.2rem;
+    }
+    .prog-icon {
+      width: 50px; height: 50px; border-radius: 12px;
+      background: var(--light); display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+    .prog-info h4 { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem; }
+    .prog-info p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+    .prog-badge {
+      margin-left: auto; font-size: 0.72rem; font-weight: 700;
+      padding: 0.25rem 0.7rem; border-radius: 20px; white-space: nowrap;
+      background: #E8F5E9; color: var(--primary); border: 1px solid var(--border);
+    }
+    @media (max-width: 500px) { .prog-badge { display: none; } }
+
+    /* REGISTRATION FORM */
+    .form-wrap {
+      background: var(--primary); color: #fff;
+      padding: 4rem 1.5rem;
+    }
+    .form-inner { max-width: 700px; margin: 0 auto; }
+    .form-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .form-sub { opacity: 0.8; font-size: 0.9rem; margin-bottom: 2rem; line-height: 1.6; }
+
+    .reg-card {
+      background: #fff; border-radius: 14px; padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+    .form-row.full { grid-template-columns: 1fr; }
+
+    .field { display: flex; flex-direction: column; }
+    .field label { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.3rem; font-weight: 600; }
+    .field label .req { color: #c0392b; }
+    .field input, .field select, .field textarea {
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 0.6rem 0.85rem; font-size: 0.9rem; font-family: inherit;
+      outline: none; transition: border-color 0.2s; color: var(--text);
+    }
+    .field input:focus, .field select:focus { border-color: var(--primary); }
+    .field textarea { min-height: 80px; resize: vertical; }
+
+    .check-group { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.3rem; }
+    .check-item {
+      display: flex; align-items: center; gap: 0.35rem;
+      background: var(--light); border: 1.5px solid var(--border); border-radius: 20px;
+      padding: 0.35rem 0.8rem; cursor: pointer; font-size: 0.8rem; transition: all 0.15s;
+      color: var(--text);
+    }
+    .check-item:hover { border-color: var(--primary); }
+    .check-item.checked { border-color: var(--primary); background: #C8E6C9; color: var(--primary); font-weight: 600; }
+    .check-item input { accent-color: var(--primary); }
+
+    .consent-row {
+      display: flex; align-items: flex-start; gap: 0.7rem;
+      background: #F9F9F9; border: 1px solid #E0E0E0; border-radius: 8px;
+      padding: 0.9rem; margin-bottom: 1.2rem; font-size: 0.82rem; color: #555;
+    }
+    .consent-row input { accent-color: var(--primary); margin-top: 2px; flex-shrink: 0; }
+
+    .btn-reg {
+      width: 100%; padding: 1rem; background: var(--primary); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(27,94,32,0.3);
+    }
+    .btn-reg:hover { background: #1B5E20; transform: translateY(-1px); }
+    .btn-reg:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .spinner {
+      display: inline-block; width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff;
+      border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 5px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alert { padding: 0.9rem 1.1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.88rem; display: none; }
+    .alert.visible { display: block; }
+    .alert.success { background: #E8F5E9; border: 1px solid var(--primary); color: #1B5E20; }
+    .alert.error   { background: #FFEBEE; border: 1px solid #C62828; color: #B71C1C; }
+
+    /* KAKAO */
+    .kakao-banner {
+      background: #FAE100; color: #3A1F1F;
+      padding: 2.5rem 1.5rem; text-align: center;
+    }
+    .kakao-banner h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .kakao-banner p { font-size: 0.88rem; margin-bottom: 1.2rem; opacity: 0.8; }
+    .btn-kakao {
+      display: inline-block; background: #3A1F1F; color: #FAE100;
+      font-weight: 800; padding: 0.8rem 2rem; border-radius: 30px;
+      font-size: 0.95rem; transition: opacity 0.2s;
+    }
+    .btn-kakao:hover { opacity: 0.85; }
+
+    /* FOOTER */
+    footer {
+      background: #1A2E1A; color: rgba(255,255,255,0.65);
+      text-align: center; padding: 2rem; font-size: 0.8rem;
+    }
+    footer strong { color: #fff; }
+    footer a { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">엘림G<span>브릿지</span> · 청소년</div>
+  <div class="nav-links">
+    <a href="#services">서비스</a>
+    <a href="#programs">프로그램</a>
+    <a href="#register">등록하기</a>
+    <a href="https://elimg.kr">선교 허브</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circles">
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+    <div class="circle c3"></div>
+  </div>
+  <div class="hero-badge">ELIMG BRIDGE · 청소년 센터</div>
+  <div class="hero-flags">🇳🇵 🇻🇳 🇵🇭 🌏 🇰🇷</div>
+  <h1>네 꿈을 향한<br><span class="accent">브릿지</span>가 여기 있어</h1>
+  <p>이주민 가정에서 태어났지만, 꿈은 국경이 없어요.<br>학습·진로·멘토링·커뮤니티, 우리가 함께 갑니다.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">지금 등록하기</button>
+    <button class="btn-outline" onclick="document.getElementById('programs').scrollIntoView({behavior:'smooth'})">프로그램 보기</button>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-label">OUR SERVICES</div>
+  <div class="section-title">우리가 도와줄 수 있어요</div>
+  <div class="section-sub">이주민 청소년이 한국에서 당당하게 꿈을 키울 수 있도록 6가지 서비스를 제공합니다.</div>
+  <div class="service-grid">
+    <div class="service-card">
+      <div class="s-icon">📚</div>
+      <h3>학습 지원</h3>
+      <p>국어·수학·영어 과목별 학습 멘토 연결. 방과후 스터디 그룹 운영.</p>
+    </div>
+    <div class="service-card">
+      <div class="s-icon">🗺️</div>
+      <h3>진로 상담</h3>
+      <p>적성 검사 + 직업 탐색. 이주민 출신 선배와의 1:1 진로 멘토링.</p>
+    </div>
+    <div class="service-card">
+      <div class="s-icon">🇰🇷</div>
+      <h3>한국어 교육</h3>
+      <p>학교 교과 한국어부터 일상 표현까지. 국적별 맞춤 지도.</p>
+    </div>
+    <div class="service-card">
+      <div class="s-icon">🤝</div>
+      <h3>멘토링</h3>
+      <p>같은 국적 출신 대학생·직장인 선배 멘토. 월 2회 정기 만남.</p>
+    </div>
+    <div class="service-card">
+      <div class="s-icon">👥</div>
+      <h3>청소년 커뮤니티</h3>
+      <p>다양한 국적의 또래 친구들과 함께하는 모임, 캠프, 여행.</p>
+    </div>
+    <div class="service-card">
+      <div class="s-icon">💼</div>
+      <h3>법률·행정 지원</h3>
+      <p>비자, 학적, 국적 관련 문의 및 관계 기관 연결.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STORIES -->
+<div class="stories-bg">
+  <section class="section">
+    <div class="section-label">STORIES</div>
+    <div class="section-title">함께한 청소년들의 이야기</div>
+    <div class="section-sub">엘림G브릿지와 함께 꿈을 키운 청소년들의 실제 이야기입니다.</div>
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-quote">"</div>
+        <div class="story-text">한국어가 서툴러 학교에서 힘들었는데, 멘토 선생님 덕분에 자신감이 생겼어요. 이제 반에서 발표도 잘 해요!</div>
+        <div class="story-who">🇻🇳 김○○ · 중학교 2학년 · 김해</div>
+      </div>
+      <div class="story-card">
+        <div class="story-quote">"</div>
+        <div class="story-text">아버지가 네팔에서 오셨는데, 진로 상담을 받고 IT 개발자의 꿈이 생겼어요. 대학도 목표가 생겼고요!</div>
+        <div class="story-who">🇳🇵 이○○ · 고등학교 1학년 · 거제</div>
+      </div>
+      <div class="story-card">
+        <div class="story-quote">"</div>
+        <div class="story-text">캠프에서 다른 나라 친구들을 만나고 나서 "다르다"는 게 특별한 거라는 걸 알았어요. 더 자랑스러워졌어요.</div>
+        <div class="story-who">🇵🇭 박○○ · 고등학교 2학년 · 부산</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PROGRAMS -->
+<section class="section" id="programs">
+  <div class="section-label">PROGRAMS 2026</div>
+  <div class="section-title">운영 중인 프로그램</div>
+  <div class="section-sub">엘림G브릿지 청소년 센터의 현재 운영 프로그램입니다.</div>
+  <div class="program-list">
+    <div class="program-item">
+      <div class="prog-icon">📖</div>
+      <div class="prog-info">
+        <h4>주중 스터디 클럽</h4>
+        <p>매주 수·금 오후 4~6시 | 거제·김해 교육장 | 국어·수학·영어 과목별 지원</p>
+      </div>
+      <span class="prog-badge">운영 중</span>
+    </div>
+    <div class="program-item">
+      <div class="prog-icon">🎯</div>
+      <div class="prog-info">
+        <h4>진로 탐색 캠프</h4>
+        <p>분기 1회 (2박 3일) | 직업 체험 + 선배 멘토 만남 + 팀 프로젝트</p>
+      </div>
+      <span class="prog-badge">2026.6 모집</span>
+    </div>
+    <div class="program-item">
+      <div class="prog-icon">🌐</div>
+      <div class="prog-info">
+        <h4>이중언어 리더십 과정</h4>
+        <p>모국어 + 한국어 능력을 강점으로 전환 | 통역 실습 + 글로컬 직업 탐색</p>
+      </div>
+      <span class="prog-badge">모집 중</span>
+    </div>
+    <div class="program-item">
+      <div class="prog-icon">🏕️</div>
+      <div class="prog-info">
+        <h4>글로컬 청소년 교류 캠프</h4>
+        <p>연 1회 | 한국·네팔·베트남 청소년 온·오프라인 교류 | 선교적 비전 나눔</p>
+      </div>
+      <span class="prog-badge">2026.8 예정</span>
+    </div>
+    <div class="program-item">
+      <div class="prog-icon">💬</div>
+      <div class="prog-info">
+        <h4>1:1 멘토링 매칭</h4>
+        <p>상시 신청 | 같은 국적 대학생·직장인 멘토 | 월 2회 정기 만남 + 카카오 채팅</p>
+      </div>
+      <span class="prog-badge">상시 모집</span>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTER FORM -->
+<div class="form-wrap" id="register">
+  <div class="form-inner">
+    <div class="form-title">청소년 등록하기 🌱</div>
+    <div class="form-sub">등록하면 맞춤 프로그램 안내와 멘토를 연결해 드립니다.<br>본인 또는 부모님이 등록하실 수 있습니다.</div>
+
+    <div class="reg-card">
+      <div id="alert-success" class="alert success">✅ 등록 완료! 담당자가 3일 내 카카오 또는 전화로 연락드립니다.</div>
+      <div id="alert-error"   class="alert error">⚠️ 오류가 발생했습니다. 잠시 후 다시 시도하거나 카카오로 문의해 주세요.</div>
+
+      <form id="youthForm" novalidate>
+        <div class="form-row">
+          <div class="field">
+            <label>이름 <span class="req">*</span></label>
+            <input type="text" name="name" required placeholder="청소년 이름">
+          </div>
+          <div class="field">
+            <label>국적 (부모님 국적) <span class="req">*</span></label>
+            <input type="text" name="nationality" required placeholder="네팔, 베트남, 필리핀...">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>학교 구분</label>
+            <select name="school_level">
+              <option value="">선택</option>
+              <option>초등학교</option><option>중학교</option><option>고등학교</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>학교명</label>
+            <input type="text" name="school_name" placeholder="○○중학교">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>한국어 능력</label>
+            <select name="korean_proficiency">
+              <option value="">선택</option>
+              <option value="상">상 — 유창하게 소통</option>
+              <option value="중">중 — 일상 대화 가능</option>
+              <option value="하">하 — 도움이 많이 필요</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>거주 지역</label>
+            <select name="region">
+              <option value="">선택</option>
+              <option>거제</option><option>김해</option><option>울산</option>
+              <option>창원</option><option>부산</option><option>기타</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>연락처 (부모님)</label>
+            <input type="tel" name="phone" placeholder="010-0000-0000">
+          </div>
+          <div class="field">
+            <label>카카오 ID</label>
+            <input type="text" name="kakao_id" placeholder="카카오톡 아이디">
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:1rem;">
+          <label>관심 서비스 (복수 선택)</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" value="학습지원"> 📚 학습지원</label>
+            <label class="check-item"><input type="checkbox" value="진로상담"> 🗺️ 진로상담</label>
+            <label class="check-item"><input type="checkbox" value="한국어"> 🇰🇷 한국어</label>
+            <label class="check-item"><input type="checkbox" value="멘토링"> 🤝 멘토링</label>
+            <label class="check-item"><input type="checkbox" value="커뮤니티"> 👥 커뮤니티</label>
+            <label class="check-item"><input type="checkbox" value="법률행정"> 💼 법률·행정</label>
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:1.2rem;">
+          <label>하고 싶은 말 / 상담 내용</label>
+          <textarea name="notes" placeholder="걱정되는 점, 꿈, 도움받고 싶은 것을 자유롭게 적어주세요"></textarea>
+        </div>
+
+        <div class="consent-row">
+          <input type="checkbox" id="consent" required>
+          <label for="consent">
+            개인정보 수집·이용에 동의합니다. (수집 항목: 이름, 국적, 연락처, 학교 정보 / 목적: 맞춤 서비스 제공 / 보유: 철회 시까지)
+          </label>
+        </div>
+
+        <button type="submit" class="btn-reg" id="btn-submit">등록 완료 🌱</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- KAKAO BANNER -->
+<div class="kakao-banner">
+  <h3>💬 카카오 채널로 바로 문의하세요</h3>
+  <p>등록 전 궁금한 점, 긴급 상담, 프로그램 일정 문의</p>
+  <a href="https://pf.kakao.com/_elimgbridge" class="btn-kakao" target="_blank">카카오 채널 열기</a>
+</div>
+
+<footer>
+  <strong>엘림G브릿지 청소년 센터</strong> | 엘림G선교회<br>
+  경남 거제·김해·창원·부산 ·
+  <a href="https://elimg.kr">elimg.kr</a> ·
+  <a href="https://elimg.com">elimg.com</a>
+</footer>
+
+<script>
+const SUPABASE_URL  = 'https://zaygzrbfuwulbceppamx.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpheWd6cmJmdXd1bGJjZXBwYW14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NjQxNTksImV4cCI6MjA5MTU0MDE1OX0.8RoTfAdtobsZwbFadK8FD_B3dt2ttm4l1ZuX0Piir5M';
+
+document.addEventListener('change', function(e) {
+  if (e.target.type === 'checkbox' && e.target.closest('.check-item')) {
+    e.target.closest('.check-item').classList.toggle('checked', e.target.checked);
+  }
+});
+
+document.getElementById('youthForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  if (!document.getElementById('consent').checked) { alert('개인정보 동의가 필요합니다.'); return; }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>등록 중...';
+
+  const fd = new FormData(this);
+  const serviceInterest = Array.from(this.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value).filter(v => v !== 'on');
+
+  const payload = {
+    user_type: 'immigrant_youth',
+    name:       fd.get('name')?.trim(),
+    nationality: fd.get('nationality')?.trim(),
+    school_level: fd.get('school_level') || null,
+    school_name:  fd.get('school_name')?.trim() || null,
+    korean_proficiency: fd.get('korean_proficiency') || null,
+    region:  fd.get('region')  || null,
+    phone:   fd.get('phone')?.trim()    || null,
+    kakao_id: fd.get('kakao_id')?.trim() || null,
+    notes:   fd.get('notes')?.trim()    || null,
+    service_interest: serviceInterest.length ? serviceInterest : null,
+    consent_personal_info: true,
+    site_source: 'glocal-youth',
+  };
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON,
+        'Authorization': `Bearer ${SUPABASE_ANON}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok || res.status === 201) {
+      document.getElementById('alert-success').classList.add('visible');
+      this.reset();
+      document.querySelectorAll('.check-item').forEach(c => c.classList.remove('checked'));
+      window.scrollTo({ top: document.getElementById('register').offsetTop - 70, behavior: 'smooth' });
+    } else { throw new Error(); }
+  } catch {
+    document.getElementById('alert-error').classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '등록 완료 🌱';
+  }
+});
+</script>
+</body>
+</html>
