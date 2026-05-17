@@ -20,7 +20,7 @@
 ## 배포
 
 - 호스팅: Netlify (정적)
-- 도메인: `elimgbridge.netlify.app` (임시) → 사용자 도메인 통일 예정
+- 도메인: `elim-g-bridge.netlify.app` (임시) → 사용자 도메인 통일 예정
 
 ## 단계
 
@@ -32,4 +32,4 @@
 
 - elimg.kr — 엘림G브릿지 선교회 (메인)
 - elimg.com — GlocalBridge AI 컨설팅 (비즈)
-- elimgbridge.netlify.app — 통합 플랫폼 (이 저장소)
+- elim-g-bridge.netlify.app — 통합 플랫폼 (이 저장소)

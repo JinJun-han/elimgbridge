@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /docs/
 
-Sitemap: https://elimgbridge.netlify.app/sitemap.xml
+Sitemap: https://elim-g-bridge.netlify.app/sitemap.xml
