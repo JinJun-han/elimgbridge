@@ -558,18 +558,17 @@ document.getElementById('regForm').addEventListener('submit', async function(e) 
   payload.language = navigator.language?.startsWith('ko') ? 'ko' : 'en';
 
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/users`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/register_user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'apikey': SUPABASE_ANON,
-        'Authorization': `Bearer ${SUPABASE_ANON}`,
-        'Prefer': 'return=minimal'
+        'Authorization': `Bearer ${SUPABASE_ANON}`
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ payload })
     });
 
-    if (res.ok || res.status === 201) {
+    if (res.ok) {
       document.getElementById('alert-success').classList.add('visible');
       document.getElementById('regForm').style.display = 'none';
     } else {
