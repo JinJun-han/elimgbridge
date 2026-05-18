@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>등록 데이터 관리 | 엘림G브릿지 Admin</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Malgun Gothic','Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+
+/* GATE */
+.gate{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem}
+.gate-card{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:2.5rem 2rem;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.gate-card h1{font-size:1.4rem;margin-bottom:.5rem;color:#fff}
+.gate-card .sub{font-size:.85rem;color:#94a3b8;margin-bottom:1.5rem}
+.gate-card input{width:100%;padding:.85rem 1rem;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:.95rem;outline:none;transition:border .2s}
+.gate-card input:focus{border-color:#3b82f6}
+.gate-card button{width:100%;margin-top:.75rem;padding:.85rem;background:#3b82f6;border:none;border-radius:8px;color:#fff;font-weight:600;font-size:.95rem;cursor:pointer;transition:background .2s}
+.gate-card button:hover{background:#2563eb}
+.gate-card button:disabled{background:#475569;cursor:not-allowed}
+.gate-err{margin-top:.75rem;padding:.6rem .8rem;background:#7f1d1d;color:#fecaca;border-radius:6px;font-size:.85rem;display:none}
+.gate-err.show{display:block}
+
+/* DASHBOARD */
+.dash{display:none;padding:1.5rem;max-width:1400px;margin:0 auto}
+.dash.show{display:block}
+.dash-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #334155}
+.dash-head h1{font-size:1.3rem;color:#fff}
+.dash-head .meta{font-size:.85rem;color:#94a3b8}
+.dash-tools{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.dash-tools input,.dash-tools select{padding:.55rem .85rem;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:.88rem;outline:none}
+.dash-tools input{flex:1;min-width:200px}
+.dash-tools input:focus,.dash-tools select:focus{border-color:#3b82f6}
+.dash-tools button{padding:.55rem 1rem;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:.88rem;cursor:pointer;transition:all .2s}
+.dash-tools button:hover{background:#334155;border-color:#475569}
+.dash-tools button.csv{background:#059669;border-color:#059669}
+.dash-tools button.csv:hover{background:#047857;border-color:#047857}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.75rem;margin-bottom:1.5rem}
+.stat{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:1rem;text-align:center}
+.stat .n{font-size:1.6rem;font-weight:700;color:#3b82f6}
+.stat .l{font-size:.75rem;color:#94a3b8;margin-top:.2rem}
+
+.table-wrap{background:#1e293b;border:1px solid #334155;border-radius:10px;overflow:auto;max-height:60vh}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead{position:sticky;top:0;background:#0f172a;z-index:1}
+th{padding:.65rem .75rem;text-align:left;font-weight:600;color:#94a3b8;border-bottom:1px solid #334155;white-space:nowrap}
+td{padding:.55rem .75rem;border-bottom:1px solid #1e293b;color:#e2e8f0}
+tr:hover td{background:#0f172a}
+.badge{display:inline-block;padding:.15rem .55rem;border-radius:10px;font-size:.7rem;font-weight:600}
+.badge.immigrant_worker{background:#1e40af;color:#dbeafe}
+.badge.international_student{background:#7c3aed;color:#ede9fe}
+.badge.overseas_student{background:#0891b2;color:#cffafe}
+.badge.immigrant_youth{background:#16a34a;color:#dcfce7}
+.badge.multicultural_family{background:#ea580c;color:#ffedd5}
+.badge.parent{background:#db2777;color:#fce7f3}
+.badge.volunteer{background:#ca8a04;color:#fef9c3}
+.badge.church_partner{background:#9333ea;color:#f3e8ff}
+
+.empty{padding:3rem 1rem;text-align:center;color:#64748b}
+.err-banner{padding:.85rem 1rem;background:#7f1d1d;color:#fecaca;border-radius:8px;margin-bottom:1rem}
+</style>
+</head>
+<body>
+
+<!-- 로그인 게이트 -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <h1>🔐 Admin 접근</h1>
+    <p class="sub">엘림G브릿지 등록 데이터 관리 페이지</p>
+    <input id="passInput" type="password" placeholder="관리자 비밀번호" autocomplete="off" autofocus>
+    <button id="loginBtn">접속</button>
+    <div class="gate-err" id="gateErr">비밀번호가 일치하지 않습니다</div>
+  </div>
+</div>
+
+<!-- 대시보드 -->
+<div class="dash" id="dash">
+  <div class="dash-head">
+    <h1>📋 등록 데이터 관리</h1>
+    <div class="meta">엘림G브릿지 · <span id="lastFetch">방금</span></div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="dash-tools">
+    <input id="search" type="search" placeholder="이름·전화·이메일·국적 검색">
+    <select id="filterType">
+      <option value="">전체 유형</option>
+      <option value="immigrant_worker">이주민 근로자</option>
+      <option value="international_student">국내 유학생</option>
+      <option value="overseas_student">해외 유학생</option>
+      <option value="immigrant_youth">이주민 청소년</option>
+      <option value="multicultural_family">다문화 가정</option>
+      <option value="parent">학부모</option>
+      <option value="volunteer">자원봉사자</option>
+      <option value="church_partner">교회 파트너</option>
+    </select>
+    <button id="refreshBtn">🔄 새로고침</button>
+    <button id="csvBtn" class="csv">⬇ CSV 다운로드</button>
+  </div>
+
+  <div id="errBanner"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>등록일</th><th>유형</th><th>이름</th><th>국적</th><th>연령</th>
+          <th>전화</th><th>카톡</th><th>이메일</th><th>지역</th><th>비고</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL  = 'https://zaygzrbfuwulbceppamx.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_h5bShUw6eWi-00fNH4drcA_OdllSAEf';
+
+const TYPE_LABEL = {
+  immigrant_worker: '이주민근로자',
+  international_student: '국내유학생',
+  overseas_student: '해외유학생',
+  immigrant_youth: '이주민청소년',
+  multicultural_family: '다문화가정',
+  parent: '학부모',
+  volunteer: '자원봉사',
+  church_partner: '교회파트너'
+};
+
+let allRows = [];
+let adminPass = sessionStorage.getItem('admin_pass') || '';
+
+// 자동 로그인 시도 (세션 보존 - 새로고침 시 다시 비밀번호 안 묻게)
+if (adminPass) {
+  fetchData().then(ok => { if (ok) showDash(); });
+}
+
+document.getElementById('loginBtn').addEventListener('click', tryLogin);
+document.getElementById('passInput').addEventListener('keypress', e => {
+  if (e.key === 'Enter') tryLogin();
+});
+document.getElementById('refreshBtn').addEventListener('click', () => fetchData().then(render));
+document.getElementById('search').addEventListener('input', render);
+document.getElementById('filterType').addEventListener('change', render);
+document.getElementById('csvBtn').addEventListener('click', exportCsv);
+
+async function tryLogin() {
+  const pass = document.getElementById('passInput').value;
+  if (!pass) return;
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = '확인 중...';
+  adminPass = pass;
+  const ok = await fetchData();
+  if (ok) {
+    sessionStorage.setItem('admin_pass', pass);
+    showDash();
+  } else {
+    document.getElementById('gateErr').classList.add('show');
+    document.getElementById('passInput').value = '';
+    document.getElementById('passInput').focus();
+  }
+  btn.disabled = false; btn.textContent = '접속';
+}
+
+function showDash() {
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('dash').classList.add('show');
+  render();
+}
+
+async function fetchData() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_registrations`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON,
+        'Authorization': `Bearer ${SUPABASE_ANON}`
+      },
+      body: JSON.stringify({ admin_pass: adminPass })
+    });
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) return false;
+      const txt = await res.text();
+      showError(`서버 오류 ${res.status}: ${txt.slice(0,200)}`);
+      return false;
+    }
+    allRows = await res.json();
+    document.getElementById('lastFetch').textContent = new Date().toLocaleString('ko-KR');
+    return true;
+  } catch (e) {
+    showError(`네트워크 오류: ${e.message}`);
+    return false;
+  }
+}
+
+function showError(msg) {
+  const b = document.getElementById('errBanner');
+  b.className = 'err-banner';
+  b.textContent = msg;
+  setTimeout(() => { b.className = ''; b.textContent = ''; }, 5000);
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  const t = document.getElementById('filterType').value;
+  let rows = allRows;
+  if (t) rows = rows.filter(r => r.user_type === t);
+  if (q) rows = rows.filter(r =>
+    [r.name, r.phone, r.email, r.nationality, r.kakao_id, r.region, r.notes].some(v => v && String(v).toLowerCase().includes(q))
+  );
+
+  // 통계
+  const stats = {};
+  allRows.forEach(r => stats[r.user_type] = (stats[r.user_type] || 0) + 1);
+  const statHtml = [`<div class="stat"><div class="n">${allRows.length}</div><div class="l">전체</div></div>`]
+    .concat(Object.entries(stats).map(([k,v]) =>
+      `<div class="stat"><div class="n">${v}</div><div class="l">${TYPE_LABEL[k] || k}</div></div>`
+    )).join('');
+  document.getElementById('stats').innerHTML = statHtml;
+
+  // 테이블
+  const tbody = document.getElementById('rows');
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" class="empty">표시할 데이터가 없습니다</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td>${formatDate(r.created_at)}</td>
+      <td><span class="badge ${r.user_type}">${TYPE_LABEL[r.user_type] || r.user_type}</span></td>
+      <td>${esc(r.name)}</td>
+      <td>${esc(r.nationality)}</td>
+      <td>${esc(r.age_group || '')}</td>
+      <td>${esc(r.phone || '')}</td>
+      <td>${esc(r.kakao_id || '')}</td>
+      <td>${esc(r.email || '')}</td>
+      <td>${esc(r.region || '')}</td>
+      <td>${esc(r.notes || '')}</td>
+    </tr>
+  `).join('');
+}
+
+function esc(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+function exportCsv() {
+  if (allRows.length === 0) return alert('내보낼 데이터가 없습니다');
+  const cols = ['created_at','user_type','name','nationality','age_group','phone','kakao_id','email','region','language','workplace','kiip_level','university','major','study_year','visa_type','school_level','school_name','parent_nationality','target_country','target_university','departure_year','scholarship_interest','parttime_job_need','mission_interest','site_source','notes'];
+  const head = cols.join(',');
+  const body = allRows.map(r => cols.map(c => {
+    const v = r[c];
+    if (v == null) return '';
+    const s = String(v).replace(/"/g,'""');
+    return /[,"\n]/.test(s) ? `"${s}"` : s;
+  }).join(',')).join('\n');
+  const csv = '﻿' + head + '\n' + body;  // UTF-8 BOM for Excel Korean
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `elimgbridge_registrations_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
