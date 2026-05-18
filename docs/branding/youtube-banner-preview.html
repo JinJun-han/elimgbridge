@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>엘림G브릿지 YouTube 배너 — 프리미엄 디자인 3안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:#1a1a1a;color:#e5e5e5;padding:2rem;line-height:1.6}
+h1{font-family:'Nanum Myeongjo',serif;font-size:1.6rem;font-weight:800;color:#fff;margin-bottom:.5rem}
+.intro{color:#999;font-size:.9rem;margin-bottom:2rem;max-width:760px;line-height:1.8}
+.intro strong{color:#b8892e}
+.banner-label{font-size:.75rem;letter-spacing:3px;color:#b8892e;font-weight:600;text-transform:uppercase;margin:2.5rem 0 .8rem}
+.banner-frame{width:100%;max-width:1280px;aspect-ratio:2560/1440;background:#000;border-radius:8px;overflow:hidden;position:relative;margin-bottom:.5rem;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.banner-info{font-size:.78rem;color:#888;margin-bottom:.3rem}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* CONCEPT A — 클래식 미션 (Classic Mission) */
+/* Dark navy + gold, premium serif, restrained */
+.bA{background:radial-gradient(ellipse at 30% 50%, #1a3654 0%, #0a1f35 60%, #051422 100%);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 8%}
+.bA::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#b8892e 50%,transparent)}
+.bA::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#b8892e 30%,#b8892e 70%,transparent)}
+.bA-content{text-align:center;max-width:80%;position:relative;z-index:2}
+.bA-mark{display:inline-block;font-family:'Playfair Display',serif;font-style:italic;font-size:1.3vw;color:#b8892e;letter-spacing:.6em;margin-bottom:1.5vw;font-weight:400}
+.bA-divider{width:60px;height:1px;background:#b8892e;margin:0 auto 1.5vw;opacity:.5}
+.bA-ko{font-family:'Nanum Myeongjo',serif;font-size:5vw;font-weight:800;color:#fff;letter-spacing:.06em;line-height:1.05;margin-bottom:1vw}
+.bA-en{font-family:'Playfair Display',serif;font-style:italic;font-size:1.7vw;color:rgba(255,255,255,.55);letter-spacing:.18em;font-weight:400;margin-bottom:2vw}
+.bA-tag{font-family:'Nanum Myeongjo',serif;font-size:1.5vw;color:#b8892e;letter-spacing:.3em;font-weight:400;margin-top:1vw}
+.bA-tag span{margin:0 .6vw}
+.bA-tag span:nth-child(2),.bA-tag span:nth-child(4){opacity:.4}
+.bA-meta{position:absolute;bottom:3vw;right:5vw;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1vw;color:rgba(184,137,46,.6);letter-spacing:.1em}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* CONCEPT B — 따뜻한 글로컬 (Warm Glocal) */
+/* Cream + wine + gold, atmospheric, welcoming */
+.bB{background:linear-gradient(135deg, #faf6ec 0%, #f0e8d6 50%, #e8dcc0 100%);position:absolute;inset:0;display:flex;align-items:center;padding:0 10%;overflow:hidden}
+.bB::before{content:'';position:absolute;top:50%;right:-10%;width:50%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(196,154,34,.18) 0%,transparent 70%);transform:translateY(-50%)}
+.bB::after{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,transparent,#5B2C3F 30%,#5B2C3F 70%,transparent)}
+.bB-content{position:relative;z-index:2;max-width:60%}
+.bB-mark{font-family:'Cormorant Garamond',serif;font-size:1.3vw;color:#5B2C3F;letter-spacing:.5em;font-style:italic;font-weight:500;margin-bottom:1vw;text-transform:uppercase;opacity:.7}
+.bB-ko{font-family:'Nanum Myeongjo',serif;font-size:4.5vw;font-weight:800;color:#3D1A2B;letter-spacing:.04em;line-height:1.1;margin-bottom:.8vw}
+.bB-ko em{font-style:normal;color:#C49A22;font-family:'Nanum Myeongjo',serif}
+.bB-en{font-family:'Playfair Display',serif;font-style:italic;font-size:1.7vw;color:#5B2C3F;letter-spacing:.15em;margin-bottom:2.2vw;opacity:.7}
+.bB-tag-grid{display:flex;align-items:center;gap:1.5vw;margin-top:1vw}
+.bB-tag{font-family:'Nanum Myeongjo',serif;font-size:1.45vw;color:#5B2C3F;font-weight:700;letter-spacing:.1em}
+.bB-dot{width:.4vw;height:.4vw;border-radius:50%;background:#C49A22}
+.bB-decor{position:absolute;right:5vw;top:50%;transform:translateY(-50%);font-family:'Playfair Display',serif;font-style:italic;font-size:1.1vw;color:rgba(91,44,63,.4);text-align:right;line-height:1.8;max-width:25%}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* CONCEPT C — 모던 시네마틱 (Modern Cinematic) */
+/* Gradient horizon, bridge silhouette, cinematic */
+.bC{position:absolute;inset:0;background:linear-gradient(180deg,#0a1f35 0%,#1a3654 35%,#5B2C3F 75%,#3D1A2B 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 8%;overflow:hidden}
+.bC::before{content:'';position:absolute;left:0;right:0;bottom:25%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,200,100,.4) 30%,rgba(255,200,100,.6) 50%,rgba(255,200,100,.4) 70%,transparent)}
+.bC-sun{position:absolute;top:25%;left:50%;transform:translateX(-50%);width:8vw;height:8vw;border-radius:50%;background:radial-gradient(circle,#FFD27A 0%,#E8C05A 30%,rgba(196,154,34,.4) 60%,transparent 80%);filter:blur(2px)}
+.bC-bridge{position:absolute;left:50%;bottom:25%;transform:translateX(-50%);width:60%;height:2px;background:linear-gradient(90deg,transparent,#E8C05A 20%,#E8C05A 80%,transparent)}
+.bC-bridge::before{content:'';position:absolute;left:50%;top:-1.5vw;transform:translateX(-50%);width:30%;height:1.5vw;border-top:2px solid #E8C05A;border-radius:50% 50% 0 0/100% 100% 0 0}
+.bC-content{position:relative;z-index:2;text-align:center}
+.bC-ko{font-family:'Nanum Myeongjo',serif;font-size:5.5vw;font-weight:800;color:#fff;letter-spacing:.05em;text-shadow:0 4px 30px rgba(0,0,0,.5);margin-bottom:.8vw;line-height:1}
+.bC-en{font-family:'Playfair Display',serif;font-style:italic;font-size:1.8vw;color:#E8C05A;letter-spacing:.25em;font-weight:400}
+.bC-tag{position:absolute;left:50%;bottom:8%;transform:translateX(-50%);font-family:'Nanum Myeongjo',serif;font-size:1.5vw;color:rgba(255,255,255,.7);letter-spacing:.35em;font-weight:400;white-space:nowrap}
+
+/* SAFE AREA OVERLAY (실제 모바일에서 보이는 영역 표시) */
+.safe-area{position:absolute;inset:0;pointer-events:none}
+.safe-area::before{content:'TEXT SAFE AREA (1546×423 — 모바일에서도 보임)';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:60.4%;aspect-ratio:1546/423;border:1px dashed rgba(255,255,255,.15);font-family:monospace;font-size:.6vw;color:rgba(255,255,255,.25);display:flex;align-items:flex-start;justify-content:flex-start;padding:.5vw}
+.with-safe .safe-area{display:block}
+.no-safe .safe-area{display:none}
+
+.toggle{display:inline-block;padding:5px 12px;background:#2a2a2a;color:#999;font-size:.7rem;border-radius:5px;margin-left:.5rem;cursor:pointer;border:1px solid #3a3a3a}
+.toggle:hover{background:#3a3a3a;color:#fff}
+
+footer{margin-top:3rem;padding-top:2rem;border-top:1px solid #2a2a2a;font-size:.78rem;color:#666;line-height:1.8}
+footer code{background:#2a2a2a;padding:2px 6px;border-radius:3px;color:#b8892e;font-family:monospace;font-size:.85em}
+</style>
+</head>
+<body>
+
+<h1>엘림G브릿지 YouTube 채널 배너 — 프리미엄 디자인 3안</h1>
+<p class="intro">
+규격: <strong>2560×1440 pixels</strong> (YouTube 채널 배너 표준).<br>
+미리보기는 width 1280px로 축소 렌더링. 실제 적용 시 동일 비율로 2배 확대.<br>
+공통 메시지: <strong>좋은 만남 · 좋은 연결 · 좋은 연합</strong> + 엘림G브릿지 정체성.<br>
+설계 원칙: Korean 명조 + Latin serif 페어링, 제한된 색상 팔레트, 충분한 여백, 텍스트 안전 영역 준수.
+</p>
+
+<div class="banner-label">CONCEPT A — 클래식 미션 (Classic Mission)</div>
+<div class="banner-info">다크 네이비 + 골드. 사역의 무게감과 권위. CBMC 김해와 시각적 일관성.</div>
+<div class="banner-frame">
+  <div class="bA">
+    <div class="bA-content">
+      <div class="bA-mark">SINCE 1990</div>
+      <div class="bA-divider"></div>
+      <div class="bA-ko">엘림G브릿지</div>
+      <div class="bA-en">ELIM <em>G</em> BRIDGE</div>
+      <div class="bA-tag"><span>좋은 만남</span><span>·</span><span>좋은 연결</span><span>·</span><span>좋은 연합</span></div>
+    </div>
+    <div class="bA-meta">a glocal mission</div>
+  </div>
+  <div class="safe-area"></div>
+</div>
+
+<div class="banner-label">CONCEPT B — 따뜻한 글로컬 (Warm Glocal)</div>
+<div class="banner-info">크림 배경 + 와인색 + 골드. 따뜻함·환대·다문화 포용. elimg-han-sermon과 시각적 연계.</div>
+<div class="banner-frame">
+  <div class="bB">
+    <div class="bB-content">
+      <div class="bB-mark">WeBlend · Glocal Mission</div>
+      <div class="bB-ko">엘림<em>G</em>브릿지</div>
+      <div class="bB-en">Where Cultures Meet</div>
+      <div class="bB-tag-grid">
+        <div class="bB-tag">좋은 만남</div>
+        <div class="bB-dot"></div>
+        <div class="bB-tag">좋은 연결</div>
+        <div class="bB-dot"></div>
+        <div class="bB-tag">좋은 연합</div>
+      </div>
+    </div>
+    <div class="bB-decor">"좋은 연결이 좋은 연합과<br>공동체가 되어,<br>세상을 변화시킵니다."</div>
+  </div>
+  <div class="safe-area"></div>
+</div>
+
+<div class="banner-label">CONCEPT C — 모던 시네마틱 (Modern Cinematic)</div>
+<div class="banner-info">그라데이션 지평선 + 미니멀 다리 실루엣 + 골드 태양. 영화적 임팩트. 가장 강한 인상.</div>
+<div class="banner-frame">
+  <div class="bC">
+    <div class="bC-sun"></div>
+    <div class="bC-bridge"></div>
+    <div class="bC-content">
+      <div class="bC-ko">엘림G브릿지</div>
+      <div class="bC-en">ELIM G BRIDGE</div>
+    </div>
+    <div class="bC-tag">좋은 만남 · 좋은 연결 · 좋은 연합</div>
+  </div>
+  <div class="safe-area"></div>
+</div>
+
+<footer>
+  <strong style="color:#b8892e">⚐ TEXT SAFE AREA</strong> (점선 사각형) — 모바일·태블릿·TV에서도 잘리지 않고 보이는 영역. 핵심 문구는 이 안에만.<br>
+  <strong style="color:#b8892e">⚐ 사용법</strong> — 마음에 드는 디자인 캡처(Win+Shift+S) → Canva에 업로드 → 텍스트만 그대로 따라 그려서 2560×1440 PNG 내보내기.<br>
+  <strong style="color:#b8892e">⚐ 폰트</strong> — Korean: Nanum Myeongjo (Google Fonts 무료), Latin: Playfair Display + Cormorant Garamond.<br>
+  <strong style="color:#b8892e">⚐ 색상 코드</strong> — A안: <code>#0a1f35 #1a3654 #b8892e</code> | B안: <code>#faf6ec #5B2C3F #C49A22</code> | C안: <code>#0a1f35 #5B2C3F #E8C05A #FFD27A</code><br>
+  <strong style="color:#b8892e">⚐ 다음 단계</strong> — 선호 디자인 선택 후 동일 스타일로 채널 아바타(800×800) + 영상 썸네일 템플릿(1280×720) 제작.
+</footer>
+
+</body>
+</html>
